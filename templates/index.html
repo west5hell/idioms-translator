@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ title }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 p-4">
+    <!-- 容器 -->
+    <div class="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg">
+      <!-- 标题 -->
+      <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">
+        {{ heading }}
+      </h1>
+
+      <!-- 输入框 -->
+      <form method="POST" action="/" id="form">
+        <textarea
+          name="user_input"
+          placeholder="输入含有首字母缩写的文字"
+          class="w-full h-40 border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+{{ user_input }}</textarea
+        >
+        <!-- <button
+          type="submit"
+          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          提交
+        </button> -->
+        <div class="flex items-center mt-4">
+          <!-- 提交按钮 -->
+          <button
+            type="submit"
+            id="submitBtn"
+            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            提交
+          </button>
+
+          <!-- 加载指示器 -->
+          <div id="indicator" class="ml-4 hidden">
+            <svg
+              class="animate-spin h-5 w-5 text-blue-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </form>
+
+      <!-- 为什么做这东西？部分 -->
+      <!-- <div class="mt-8">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果</h2>
+        <p class="text-gray-600 leading-relaxed">
+          {{ output_text if output_text else
+          "社交平台上通过拼音首字母缩写指代特定词句的情况越来越多，为了让更多人能勉强理解这一门另类沟通方式，做了这个词转义工具。"
+          }}
+        </p>
+      </div> -->
+
+      <div class="mt-8">
+        <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果：</h2>
+        {% if output_text %}
+        <p class="text-gray-600">{{ output_text }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("form").addEventListener("submit", function () {
+        const submitBtn = document.getElementById("submitBtn");
+        const indicator = document.getElementById("indicator");
+
+        submitBtn.disabled = true;
+        indicator.classList.remove("hidden");
+
+        this.addEventListener("load", function () {
+          submitBtn.disabled = false;
+          indicator.classList.add("hidden");
+        });
+      });
+    </script>
+  </body>
+</html>
