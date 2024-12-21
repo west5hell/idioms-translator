@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, session
 
 from utilities import deepseek
+from utilities import doubao
 
 load_dotenv()
 
@@ -40,7 +41,8 @@ async def index():
 
     if request.method == "POST":
         user_input = request.form.get("user_input", "")
-        output_text = await deepseek.translate_async(user_input)
+        # output_text = await deepseek.translate_async(user_input)
+        output_text = await doubao.translate_async(user_input)
 
         session["output_text"] = output_text
         session["user_input"] = user_input
