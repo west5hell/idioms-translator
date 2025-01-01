@@ -14,6 +14,33 @@
         {{ heading }}
       </h1>
 
+      {% if not ark_inputs_submitted %}
+      <!-- <div class="space-y-4 mb-6"> -->
+      <form method="POST">
+        <input
+          type="text"
+          id="arkApiKey"
+          name="ark_api_key"
+          placeholder="输入 ARK API Key"
+          class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="text"
+          id="arkEndpointId"
+          name="ark_endpoint_id"
+          placeholder="输入 ARK Endpoint ID"
+          class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4"
+        />
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
+        >
+          提交
+        </button>
+      </form>
+      <!-- </div> -->
+      {% else %}
+
       <!-- 输入框 -->
       <form method="POST" action="/" id="form">
         <textarea
@@ -23,65 +50,62 @@
         >
 {{ user_input }}</textarea
         >
-        <!-- <button
-          type="submit"
-          class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          提交
-        </button> -->
-        <div class="flex items-center mt-4">
-          <!-- 提交按钮 -->
+
+        <div class="flex items-center justify-between mt-4">
+          <div class="flex items-center mt-4">
+            <!-- 提交按钮 -->
+            <button
+              type="submit"
+              id="submitBtn"
+              formaction="/"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              翻译
+            </button>
+
+            <!-- 加载指示器 -->
+            <div id="indicator" class="ml-4 hidden">
+              <svg
+                class="animate-spin h-5 w-5 text-blue-500"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v8H4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
           <button
             type="submit"
-            id="submitBtn"
-            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            formaction="/reset"
+            class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
           >
-            提交
+            重置API
           </button>
-
-          <!-- 加载指示器 -->
-          <div id="indicator" class="ml-4 hidden">
-            <svg
-              class="animate-spin h-5 w-5 text-blue-500"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              ></path>
-            </svg>
-          </div>
         </div>
       </form>
-
-      <!-- 为什么做这东西？部分 -->
-      <!-- <div class="mt-8">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果</h2>
-        <p class="text-gray-600 leading-relaxed">
-          {{ output_text if output_text else
-          "社交平台上通过拼音首字母缩写指代特定词句的情况越来越多，为了让更多人能勉强理解这一门另类沟通方式，做了这个词转义工具。"
-          }}
-        </p>
-      </div> -->
 
       <div class="mt-8">
         <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果：</h2>
         {% if output_text %}
-        <p class="text-gray-600">{{ output_text }}</p>
+        <pre class="text-gray-600">{{ output_text }}</pre>
         {% endif %}
       </div>
     </div>
+    {% endif %}
 
     <script>
       document.getElementById("form").addEventListener("submit", function () {
@@ -97,5 +121,56 @@
         });
       });
     </script>
+
+    {% if error_code %}
+    <script>
+      const errorCode = "{{ error_code }}";
+      let alertMessage = "";
+
+      if (errorCode.includes("MissingParameter")) {
+        alertMessage = "请求缺少必要参数";
+      } else if (errorCode.includes("InvalidParameter")) {
+        alertMessage = "请求包含非法参数";
+      } else if (errorCode.includes("InvalidEndpoint.ClosedEndpoint")) {
+        alertMessage =
+          "推理接入点处于已被关闭或暂时不可用， 请稍后重试，或联系推理接入点管理员。";
+      } else if (errorCode.includes("AuthenticationError")) {
+        alertMessage =
+          "请求携带的 API Key 或 AK/SK 校验未通过，请您重新检查设置的 鉴权凭证，或者查看 API 调用文档来排查问题。";
+      } else if (errorCode.includes("AccountOverdueError")) {
+        alertMessage =
+          "当前账号欠费，如需继续调用，请前往火山交易中心进行充值。";
+      } else if (errorCode.includes("AccessDenied")) {
+        alertMessage =
+          "没有访问该资源的权限，请检查权限设置，或联系管理员添加白名单。";
+      } else if (errorCode.includes("InvalidEndpoint.NotFound")) {
+        alertMessage = "推理接入点不存在或者非法，请检查输入的推理接入点信息。";
+      } else if (errorCode.includes("RateLimitExceeded.EndpointRPMExceeded")) {
+        alertMessage =
+          "请求所关联的推理接入点已超过 RPM (Requests Per Minute) 限制, 请稍后重试。";
+      } else if (errorCode.includes("RateLimitExceeded.EndpointTPMExceeded")) {
+        alertMessage =
+          "请求所关联的推理接入点已超过 TPM (Tokens Per Minute) 限制, 请稍后重试。";
+      } else if (errorCode.includes("ModelAccountRpmRateLimitExceeded")) {
+        alertMessage =
+          "请求已超过帐户模型 RPM (Requests Per Minute) 限制: 请您稍后重试, 或者联系平台技术同学进行解决";
+      } else if (errorCode.includes("ModelAccountTpmRateLimitExceeded")) {
+        alertMessage =
+          "请求已超过帐户模型 TPM (Tokens Per Minute) 限制: 请您稍后重试, 或者联系平台技术同学进行解决";
+      } else if (errorCode.includes("QuotaExceeded")) {
+        alertMessage =
+          "当前账号 %s 对 %s 模型的免费试用额度已消耗完毕，如需继续调用，请前往火山方舟控制台开通管理页开通对应模型服务。";
+      } else if (errorCode.includes("ModelLoadingError")) {
+        alertMessage = "模型加载中，请您稍后重试。";
+      } else if (errorCode.includes("ServerOverloaded")) {
+        alertMessage =
+          "服务资源紧张，请您稍后重试。常出现在调用流量突增或刚开始调用长时间未使用的推理接入点。";
+      } else if (errorCode.includes("InternalServiceError")) {
+        alertMessage = "内部系统异常，请您稍后重试。";
+      }
+
+      alert(alertMessage);
+    </script>
+    {% endif %}
   </body>
 </html>

@@ -1,7 +1,10 @@
 import os
 
 from dotenv import load_dotenv
+from volcenginesdkarkruntime._exceptions import ArkAPIError
 from volcenginesdkarkruntime import AsyncArk
+
+from prompts import chinese_prompt
 
 load_dotenv()
 
@@ -12,12 +15,15 @@ client = AsyncArk(api_key=api_key)
 
 
 async def translate_async(input_text: str):
-    response = await client.chat.completions.create(
-        model=endpoint_id,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant"},
-            {"role": "user", "content": input_text},
-        ],
-    )
+    try:
+        response = await client.chat.completions.create(
+            model=endpoint_id,
+            messages=[
+                {"role": "system", "content": chinese_prompt},
+                {"role": "user", "content": input_text},
+            ],
+        )
 
-    return response.choices[0].message.content
+        return response.choices[0].message.content
+    except ArkAPIError as e:
+        raise e

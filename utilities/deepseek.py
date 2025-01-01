@@ -3,6 +3,8 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI, AsyncOpenAI
 
+from prompts import deepseek_translation_prompt
+
 load_dotenv()
 
 api_key = os.environ.get("DEEPSEEK_API_KEY")
@@ -29,7 +31,7 @@ async def translate_async(input_text: str):
     response = await client_async.chat.completions.create(
         model="deepseek-chat",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant"},
+            {"role": "system", "content": deepseek_translation_prompt},
             {"role": "user", "content": input_text},
         ],
         stream=False,
