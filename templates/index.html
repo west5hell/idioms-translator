@@ -101,7 +101,11 @@
       <div class="mt-8">
         <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果：</h2>
         {% if output_text %}
-        <pre class="text-gray-600">{{ output_text }}</pre>
+        <pre
+          class="text-gray-600 whitespace-pre-wrap break-words overflow-auto max-w-full"
+        >
+{{ output_text | safe }}</pre
+        >
         {% endif %}
       </div>
     </div>
