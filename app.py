@@ -60,3 +60,7 @@ async def index():
 def reset():
     session.pop("ark_inputs_submitted", None)
     return redirect(url_for("index"))
+
+
+# 获取并配置 API Key  https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey
+# 获取并推理接入点 Endpoint ID https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint

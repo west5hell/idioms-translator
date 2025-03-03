@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ title }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss"></style>
   </head>
   <body class="bg-gray-100 p-4">
     <!-- 容器 -->
@@ -17,20 +19,44 @@
       {% if not ark_inputs_submitted %}
       <!-- <div class="space-y-4 mb-6"> -->
       <form method="POST">
-        <input
-          type="text"
-          id="arkApiKey"
-          name="ark_api_key"
-          placeholder="输入 Ark API Key"
-          class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <input
-          type="text"
-          id="arkEndpointId"
-          name="ark_endpoint_id"
-          placeholder="输入 Ark Endpoint ID"
-          class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4"
-        />
+        <div>
+          <input
+            type="text"
+            id="arkApiKey"
+            name="ark_api_key"
+            placeholder="输入 Ark API Key"
+            class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value="09747789-6879-2311-a36c-a1a366146629"
+          />
+          <div class="py-2 flex justify-end">
+            <a
+              href="https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey"
+              target="_blank"
+              class="text-blue-500"
+              >获取并配置 API Key</a
+            >
+          </div>
+        </div>
+
+        <div>
+          <input
+            type="text"
+            id="arkEndpointId"
+            name="ark_endpoint_id"
+            placeholder="输入 Ark Endpoint ID"
+            class="w-full border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 mt-4"
+            value="ep-20241221211607-56wla"
+          />
+          <div class="py-2 flex justify-end">
+            <a
+              href="https://console.volcengine.com/ark/region:ark+cn-beijing/endpoint"
+              target="_blank"
+              class="text-blue-500"
+              >获取并配置推理接入点 Endpoint ID</a
+            >
+          </div>
+        </div>
+
         <button
           type="submit"
           class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
