@@ -14,8 +14,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/", methods=["GET", "POST"])
 async def index():
-    title = "英语习语翻译"
-    heading = "英语习语翻译"
+    title = "基于豆包大模型的英语习语翻译"
     error_code = ""
 
     ark_inputs_submitted = session.get("ark_inputs_submitted", False)
@@ -48,7 +47,6 @@ async def index():
     return render_template(
         "index.html",
         title=title,
-        heading=heading,
         user_input=user_input,
         output_text=output_text,
         error_code=error_code,

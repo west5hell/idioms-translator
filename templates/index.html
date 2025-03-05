@@ -13,7 +13,7 @@
     <div class="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg">
       <!-- 标题 -->
       <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">
-        {{ heading }}
+        {{ title }}
       </h1>
 
       {% if not ark_inputs_submitted %}
@@ -124,15 +124,22 @@
         </div>
       </form>
 
-      <div class="mt-8">
-        <h2 class="text-2xl font-bold text-gray-700 mb-4">翻译结果：</h2>
-        {% if output_text %}
-        <pre
-          class="text-gray-600 whitespace-pre-wrap break-words overflow-auto max-w-full"
+      <div class="mt-8 min-h-[200px]">
+        <fieldset
+          class="border border-gray-300 rounded-lg p-6 bg-white shadow-sm min-h-[150px]"
         >
-{{ output_text | safe }}</pre
-        >
-        {% endif %}
+          <legend class="px-2 -mt-4 text-2xl font-bold text-gray-700 bg-white">
+            翻译结果：
+          </legend>
+
+          {% if output_text %}
+          <div
+            class="text-gray-600 break-words max-w-full p-4 bg-gray-50 rounded-md text-base leading-relaxed"
+          >
+            {{ output_text | safe }}
+          </div>
+          {% endif %}
+        </fieldset>
       </div>
     </div>
     {% endif %}
