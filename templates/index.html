@@ -3,21 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ url_for('static', filename='logo.svg') }}"
+    />
     <title>{{ title }}</title>
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss"></style>
   </head>
   <body class="bg-gray-100 p-4">
-    <!-- 容器 -->
-    <div class="max-w-3xl mx-auto bg-white p-6 shadow-lg rounded-lg">
-      <!-- 标题 -->
-      <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">
-        {{ title }}
-      </h1>
+    <div class="max-w-3xl mx-auto bg-white p-6 shadow-md rounded-lg">
+      <div
+        class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6"
+      >
+        <img
+          src="{{ url_for('static', filename='logo.svg') }}"
+          alt="Doubao Translate Logo"
+          class="w-12 h-12 object-contain"
+        />
+        <h1 class="text-3xl font-bold text-gray-800 text-center sm:text-left">
+          {{ title }}
+        </h1>
+      </div>
 
       {% if not ark_inputs_submitted %}
-      <!-- <div class="space-y-4 mb-6"> -->
       <form method="POST">
         <div>
           <input
@@ -64,15 +74,13 @@
           确定
         </button>
       </form>
-      <!-- </div> -->
       {% else %}
 
-      <!-- 输入框 -->
       <form method="POST" action="/" id="form">
         <textarea
           name="user_input"
           placeholder="请输入要翻译的英文内容"
-          class="w-full h-40 border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="w-full h-48 border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
         >
 {{ user_input }}</textarea
         >
@@ -84,15 +92,14 @@
               type="submit"
               id="submitBtn"
               formaction="/"
-              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               翻译
             </button>
 
-            <!-- 加载指示器 -->
             <div id="indicator" class="ml-4 hidden">
               <svg
-                class="animate-spin h-5 w-5 text-blue-500"
+                class="animate-spin h-6 w-6 text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -117,7 +124,7 @@
           <button
             type="submit"
             formaction="/reset"
-            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mt-2 sm:mt-0"
           >
             重置API
           </button>
@@ -166,6 +173,14 @@
         </fieldset>
       </div>
       {% endif %}
+
+      <footer class="mt-8 text-center text-gray-600 text-sm">
+        <p>本工具基于豆包大模型提供英语到中文的翻译服务</p>
+        <p>
+          使用方法：输入英语文本，点击“翻译”按钮获取结果。支持长句翻译，并且为英语习语进行了专门的优化测试。
+        </p>
+        <p>使用过程中，请确保网络连接稳定。</p>
+      </footer>
     </div>
 
     <script>
