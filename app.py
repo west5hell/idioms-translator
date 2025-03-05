@@ -48,7 +48,7 @@ async def index():
         "index.html",
         title=title,
         user_input=user_input,
-        output_text=output_text,
+        output_text=output_text.replace("\n", "<br>"),
         error_code=error_code,
         ark_inputs_submitted=ark_inputs_submitted,
     )

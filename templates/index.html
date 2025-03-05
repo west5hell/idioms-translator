@@ -71,7 +71,7 @@
       <form method="POST" action="/" id="form">
         <textarea
           name="user_input"
-          placeholder="输入含有首字母缩写的文字"
+          placeholder="请输入要翻译的英文内容"
           class="w-full h-40 border border-gray-300 rounded-md p-4 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
 {{ user_input }}</textarea
@@ -126,14 +126,38 @@
 
       <div class="mt-8 min-h-[200px]">
         <fieldset
-          class="border border-gray-300 rounded-lg p-6 bg-white shadow-sm min-h-[150px]"
+          class="border border-gray-300 rounded-lg p-6 bg-white shadow-sm min-h-[150px] relative"
         >
           <legend class="px-2 -mt-4 text-2xl font-bold text-gray-700 bg-white">
             翻译结果：
           </legend>
 
           {% if output_text %}
+          <button
+            id="copyButton"
+            class="absolute top-0 right-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded text-sm flex items-center gap-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-copy"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path
+                d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+              />
+            </svg>
+            <span id="copyText">复制</span>
+          </button>
           <div
+            id="translationOutput"
             class="text-gray-600 break-words max-w-full p-4 bg-gray-50 rounded-md text-base leading-relaxed"
           >
             {{ output_text | safe }}
@@ -141,8 +165,8 @@
           {% endif %}
         </fieldset>
       </div>
+      {% endif %}
     </div>
-    {% endif %}
 
     <script>
       document.getElementById("form").addEventListener("submit", function () {
@@ -157,6 +181,31 @@
           indicator.classList.add("hidden");
         });
       });
+
+      // 复制
+      document
+        .getElementById("copyButton")
+        .addEventListener("click", function () {
+          const outputText =
+            document.getElementById("translationOutput").innerText;
+          const copyTextSpan = document.getElementById("copyText");
+
+          navigator.clipboard
+            .writeText(outputText)
+            .then(() => {
+              copyTextSpan.textContent = "已复制";
+              setTimeout(() => {
+                copyTextSpan.textContent = "复制";
+              }, 2000);
+            })
+            .catch((err) => {
+              console.error("复制失败", err);
+              copyTextSpan.textContent = "复制失败";
+              setTimeout(() => {
+                copyTextSpan.textContent = "复制";
+              }, 2000);
+            });
+        });
     </script>
 
     {% if error_code %}
